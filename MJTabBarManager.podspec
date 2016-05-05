@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'MJTabBarManager/Classes/**/*'
 
-  ss.user_target_xcconfig = {
+  s.user_target_xcconfig = {
     'GCC_PREPROCESSOR_DEFINITIONS' => 'MODULE_TABBAR_MANAGER'
   }
   

@@ -1,0 +1,14 @@
+PODS:
+  - MJTabBarManager (0.1.0)
+
+DEPENDENCIES:
+  - MJTabBarManager (from `../`)
+
+EXTERNAL SOURCES:
+  MJTabBarManager:
+    :path: ../
+
+SPEC CHECKSUMS:
+  MJTabBarManager: 9195c725b2a2154e42c630c0c7452489c897de80
+
+COCOAPODS: 0.39.0

@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'MJTabBarManager_Example', :exclusive => true do
+  pod 'MJTabBarManager', :path => '../'
+end
+
+target 'MJTabBarManager_Tests', :exclusive => true do
+  pod 'MJTabBarManager', :path => '../'
+
+  
+end

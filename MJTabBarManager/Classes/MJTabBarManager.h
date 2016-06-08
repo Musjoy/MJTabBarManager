@@ -3,7 +3,7 @@
 //  Common
 //
 //  Created by 黄磊 on 16/4/6.
-//  Copyright © 2016年 YouZhun. All rights reserved.
+//  Copyright © 2016年 Musjoy. All rights reserved.
 //  <MODULE_TABBAR_MANAGER>
 
 #import <Foundation/Foundation.h>

@@ -91,6 +91,26 @@
     return 100;
 }
 
+- (void)setSelectedIndex:(NSUInteger)selectedIndex
+{
+    self.selectedViewController = [self.viewControllers objectAtIndex:selectedIndex];
+    NSLog(@"selectedIndex:%d, totalCount:%d",selectedIndex,[self.tabBar.subviews count]);
+    for (uint i=1; i < [self.tabBar.subviews count]; i++)
+    {
+        UIView *view = [self.tabBar.subviews objectAtIndex:i];
+        NSLog(@"class:%@",NSStringFromClass([view class]));
+        if ([NSStringFromClass([view class]) isEqualToString:@"UITabBarButton"])
+        {
+            //view.frame = CGRectMake(view.frame.origin.x, view.frame.origin.y, view.frame.size.width, self.tabBar.frame.size.height);
+            NSLog(@"selectedIndex:%d,i:%d",self.selectedIndex,i);
+            if (self.selectedIndex+1==i) {
+//                [self.tabBar recolorItemsWithColor:[UIColor whiteColor] shadowColor:[UIColor
+//                                                                                     blackColor] shadowOffset:view.frame.size shadowBlur:0.5];
+                
+            }
+        } 
+    }
+}
 
 
 @end

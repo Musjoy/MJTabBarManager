@@ -42,14 +42,19 @@ static MJTabBarManager *s_tabBarManager = nil;
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
-    
+    MJTabBar *theTabBar = (MJTabBar *)_tabBarController.tabBar;
+    if ([theTabBar isKindOfClass:[MJTabBar class]]) {
+        [theTabBar refreshSelectionIndicator];
+    }
 }
 
 
 - (void)loadAd
 {
     MJTabBar *theTabBar = (MJTabBar *)_tabBarController.tabBar;
-    [theTabBar loadAd];
+    if ([theTabBar isKindOfClass:[MJTabBar class]]) {
+        [theTabBar loadAd];
+    }
 }
 
 @end

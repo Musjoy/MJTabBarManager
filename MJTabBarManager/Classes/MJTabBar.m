@@ -31,6 +31,8 @@
 
 @property (nonatomic, assign) BOOL openBounds;                  /**< 用于临时开启正确bounds取值 */
 
+@property (nonatomic, strong) NSArray *arrItemViewsInOrder;     ///< 按顺序排列的UITabBarButton
+
 @end
 
 @implementation MJTabBar
@@ -58,68 +60,8 @@
     self.translucent = YES;
 }
 
-- (void)loadAd
-{
-#ifdef MODULE_AD_MANAGER
-    if ([AdManager canShowAd]) {
-        _adWidth = kScreenWidth;
-        CGFloat x = 0;
-        UIInterfaceOrientation or = [[UIApplication sharedApplication] statusBarOrientation];
-        if (or == UIInterfaceOrientationLandscapeLeft ||
-            or == UIInterfaceOrientationLandscapeRight) {
-            CGFloat theHeight = _adWidth;
-            _adWidth = kScreenHeight;
-            x = (theHeight - _adWidth) / 2;
-        }
-        CGFloat adHeight =  _adWidth * 50.0 / 320;
-        CGRect rect = CGRectMake(x, 0, _adWidth, adHeight);
-        _bannerView = [[AdManager shareInstance] createBannerAd:KEY_AD_FOR_HOME withSize:GADAdSizeFromCGSize(rect.size) receiveBlock:^{
-            if (_isAdLoaded) {
-                return;
-            }
-            _isAdLoaded = YES;
-            
-            [self checkAdShowState];
-        } removeBlock:^{
-            [self checkAdShowState];
-        }];
-        [_bannerView setFrame:rect];
-        [_bannerView setBackgroundColor:[UIColor whiteColor]];
-    }
-#endif
-}
 
-- (void)orientationChanged:(NSNotification *)note  {
-
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        return;
-    }
-    UIDeviceOrientation o = [[UIDevice currentDevice] orientation];
-    if (o == UIDeviceOrientationPortraitUpsideDown &&
-        [[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
-        return;
-    }
-    
-    switch (o) {
-        case UIDeviceOrientationPortrait:            // Device oriented vertically, home button on the bottom
-        case UIDeviceOrientationPortraitUpsideDown:  // Device oriented vertically, home button on the top
-            _needHideAd = NO;
-            break;
-        case UIDeviceOrientationLandscapeLeft:      // Device oriented horizontally, home button on the right
-            [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:YES];
-            _needHideAd = YES;
-            break;
-        case UIDeviceOrientationLandscapeRight:      // Device oriented horizontally, home button on the left
-            [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeLeft animated:YES];
-            _needHideAd = YES;
-            break;
-        default:
-            break;
-    }
-    _needHideAd = NO;   // 只有pad会走这里，横屏也必须显示广告
-    [self checkAdShowState];
-}  
-
+#pragma mark - Overwrite
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
@@ -162,6 +104,8 @@
     [super layoutSubviews];
     _openBounds = NO;
 
+    static NSInteger oldSelectIndex = -1;
+    
     if (_isAdShow && !_needHideAd) {
         CGSize aSize = [self sizeWithThatFits:[super sizeThatFits:CGSizeZero] ignoreHideState:YES];
         CGFloat offsetX = aSize.height - 48;
@@ -174,7 +118,137 @@
             }
         }
     }
+    [self refreshSelectionIndicator];
 }
+
+
+#pragma mark - Set & Get
+
+- (void)setTabBarHidden:(BOOL)tabBarHidden
+{
+    if (_tabBarHidden == tabBarHidden) {
+        return;
+    }
+    _tabBarHidden = tabBarHidden;
+    
+    [self autosizingBgView];
+    
+    CGRect rect = self.frame;
+    rect.origin.y += _tabBarHidden?(rect.size.height):(-rect.size.height);
+    [self setFrame:rect];
+    [self resizeSelf];
+}
+
+- (NSArray *)arrItemViewsInOrder
+{
+    if (_arrItemViewsInOrder == nil) {
+         _arrItemViewsInOrder = [self.subviews objectsAtIndexes:[self.subviews indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            return [obj isUserInteractionEnabled];
+        }]];
+        _arrItemViewsInOrder = [_arrItemViewsInOrder sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            if ([obj1 frame].origin.x > [obj2 frame].origin.x) {
+                return NSOrderedDescending;
+            } else {
+                return NSOrderedAscending;
+            }
+        }];
+    }
+    return _arrItemViewsInOrder;
+}
+
+#pragma mark - Public
+
+- (void)loadAd
+{
+#ifdef MODULE_AD_MANAGER
+    if ([AdManager canShowAd]) {
+        _adWidth = kScreenWidth;
+        CGFloat x = 0;
+        UIInterfaceOrientation or = [[UIApplication sharedApplication] statusBarOrientation];
+        if (or == UIInterfaceOrientationLandscapeLeft ||
+            or == UIInterfaceOrientationLandscapeRight) {
+            CGFloat theHeight = _adWidth;
+            _adWidth = kScreenHeight;
+            x = (theHeight - _adWidth) / 2;
+        }
+        CGFloat adHeight =  _adWidth * 50.0 / 320;
+        CGRect rect = CGRectMake(x, 0, _adWidth, adHeight);
+        _bannerView = [[AdManager shareInstance] createBannerAd:KEY_AD_FOR_HOME withSize:GADAdSizeFromCGSize(rect.size) receiveBlock:^{
+            if (_isAdLoaded) {
+                return;
+            }
+            _isAdLoaded = YES;
+            
+            [self checkAdShowState];
+        } removeBlock:^{
+            [self checkAdShowState];
+        }];
+        [_bannerView setFrame:rect];
+        [_bannerView setBackgroundColor:[UIColor whiteColor]];
+    }
+#endif
+}
+
+
+- (void)refreshSelectionIndicator
+{
+    if (self.selectionIndicatorImage == nil
+        || UIEdgeInsetsEqualToEdgeInsets([self.selectionIndicatorImage capInsets], UIEdgeInsetsZero)) {
+        return;
+    }
+    NSInteger curIndex = [self.items indexOfObject:self.selectedItem];
+    UIView *aView = [[self arrItemViewsInOrder] objectAtIndex:curIndex];
+    
+    if (aView.subviews.count > 2) {
+        UIImageView *viewBg = aView.subviews[0];
+        if (viewBg.subviews.count == 0) {
+            // 添加子view
+            UIImageView *imgView = [[UIImageView alloc] initWithImage:self.selectionIndicatorImage];
+            CGRect rect = UIEdgeInsetsInsetRect(viewBg.bounds, UIEdgeInsetsMake(-3, -2, -2, -2));
+            [imgView setFrame:rect];
+            [imgView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight)];
+            [viewBg addSubview:imgView];
+            [viewBg setImage:nil];
+        }
+    }
+}
+
+#pragma mark - Notification Reveive
+
+- (void)orientationChanged:(NSNotification *)note
+{
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        return;
+    }
+    UIDeviceOrientation o = [[UIDevice currentDevice] orientation];
+    if (o == UIDeviceOrientationPortraitUpsideDown &&
+        [[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
+        return;
+    }
+    
+    switch (o) {
+        case UIDeviceOrientationPortrait:            // Device oriented vertically, home button on the bottom
+        case UIDeviceOrientationPortraitUpsideDown:  // Device oriented vertically, home button on the top
+            _needHideAd = NO;
+            break;
+        case UIDeviceOrientationLandscapeLeft:      // Device oriented horizontally, home button on the right
+            [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:YES];
+            _needHideAd = YES;
+            break;
+        case UIDeviceOrientationLandscapeRight:      // Device oriented horizontally, home button on the left
+            [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeLeft animated:YES];
+            _needHideAd = YES;
+            break;
+        default:
+            break;
+    }
+    _needHideAd = NO;   // 只有pad会走这里，横屏也必须显示广告
+    [self checkAdShowState];
+}
+
+
+#pragma mark - Pravite
 
 - (void)checkAdShowState
 {
@@ -205,26 +279,6 @@
     [self resizeSelf];
 }
 
-
-
-
-- (void)setTabBarHidden:(BOOL)tabBarHidden
-{
-    if (_tabBarHidden == tabBarHidden) {
-        return;
-    }
-    _tabBarHidden = tabBarHidden;
-    
-    [self autosizingBgView];
-    
-    CGRect rect = self.frame;
-    rect.origin.y += _tabBarHidden?(rect.size.height):(-rect.size.height);
-    [self setFrame:rect];
-    [self resizeSelf];
-}
-
-
-#pragma mark - Pravite
 
 - (void)autosizingBgView
 {
@@ -262,6 +316,7 @@
     rect.origin.y -= _tabBarHidden?0:(_isAdShow?adHeight:(-adHeight));
     [self setFrame:rect];
 }
+
 
 
 @end

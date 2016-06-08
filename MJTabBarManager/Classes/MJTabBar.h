@@ -20,4 +20,6 @@
 /** 加载广告 */
 - (void)loadAd;
 
+- (void)refreshSelectionIndicator;
+
 @end

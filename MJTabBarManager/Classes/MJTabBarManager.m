@@ -20,15 +20,22 @@ static MJTabBarManager *s_tabBarManager = nil;
 
 @end
 
+
+@interface MJTabBarManager ()
+
+@property (nonatomic, strong) UITabBarController *tabBarController;
+
+@end
+
 @implementation MJTabBarManager
 
-+ (instancetype)shareInstance
+- (id)initWithTabBarController:(UITabBarController *)tabBarController
 {
-    static dispatch_once_t once;
-    dispatch_once(&once, ^{
-        s_tabBarManager = [[MJTabBarManager alloc] init];
-    });
-    return s_tabBarManager;
+    self = [super init];
+    if (self) {
+        _tabBarController = tabBarController;
+    }
+    return self;
 }
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
@@ -42,7 +49,7 @@ static MJTabBarManager *s_tabBarManager = nil;
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
-    MJTabBar *theTabBar = (MJTabBar *)_tabBarController.tabBar;
+    MJTabBar *theTabBar = (MJTabBar *)tabBarController.tabBar;
     if ([theTabBar isKindOfClass:[MJTabBar class]]) {
         [theTabBar refreshSelectionIndicator];
     }

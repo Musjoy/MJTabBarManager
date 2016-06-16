@@ -37,9 +37,7 @@
 	// Do any additional setup after loading the view.
     [self.navigationController setNavigationBarHidden:YES];
     
-    // _tabBarManager = [[TabBarManager alloc] initWithTabBar:self];
-    _tabBarManager = [MJTabBarManager shareInstance];
-    [_tabBarManager setTabBarController:self];
+    _tabBarManager = [[MJTabBarManager alloc] initWithTabBarController:self];
     [self setDelegate:_tabBarManager];
     
     [_tabBarManager loadAd];

@@ -11,9 +11,7 @@
 
 @interface MJTabBarManager : NSObject <UITabBarControllerDelegate>
 
-@property (nonatomic, strong) UITabBarController *tabBarController;
-
-+ (instancetype)shareInstance;
+- (id)initWithTabBarController:(UITabBarController *)tabBarController;
 
 - (void)loadAd;
 

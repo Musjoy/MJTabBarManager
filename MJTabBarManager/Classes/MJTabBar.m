@@ -294,6 +294,13 @@
     // 布局当前ViewController
     [aMJTabBarVC.selectedViewController.view.layer layoutSublayers];
     
+    if (![aMJTabBarVC.selectedViewController isKindOfClass:[UINavigationController class]]
+        && aMJTabBarVC.navigationController) {
+        BOOL isHide = aMJTabBarVC.navigationController.navigationBarHidden;
+        [aMJTabBarVC.navigationController setNavigationBarHidden:!isHide animated:NO];
+        [aMJTabBarVC.navigationController setNavigationBarHidden:isHide animated:NO];
+    }
+    
 //    [aMJTabBarVC.navigationController.view.layer layoutSublayers];
 //    [aMJTabBarVC.view.layer layoutSublayers];
 }

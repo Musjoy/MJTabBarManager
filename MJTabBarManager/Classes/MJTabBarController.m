@@ -44,10 +44,12 @@
 
     self.tabBar.itemPositioning = UITabBarItemPositioningFill;
     
-#if (defined(kTabActiveColor) && defined(MODULE_UTILS))
-    [self.tabBar setTintColor:kTabActiveColor];
+    [self reloadTheme];
+    
+#ifdef MODULE_THEME_MANAGER
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTheme) name:kNoticThemeChanged object:nil];
 #endif
-
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -110,6 +112,36 @@
     }
 }
 
+#pragma mark - 
+
+- (void)reloadTheme
+{
+#ifdef MODULE_THEME_MANAGER
+    // 主题风格
+    UIBarStyle barStyle = [MJThemeManager curStyle];
+    self.tabBar.barStyle = barStyle;
+    // 主色调
+    UIColor *tintColor = [MJThemeManager colorFor:kThemeTabTintColor];
+    self.tabBar.tintColor = tintColor;
+    // 背景色
+    UIColor *bgColor = [MJThemeManager colorFor:kThemeTabBgColor];
+    self.tabBar.backgroundColor = bgColor;
+    // 点击背景
+    UIColor *selectBgColor = [MJThemeManager colorFor:kThemeTabSelectBgColor];
+    if (selectBgColor) {
+        UIImage *aImg = [MJThemeManager createImageWithColor:selectBgColor withSize:CGSizeMake(3, 3)];
+        aImg = [aImg resizableImageWithCapInsets:UIEdgeInsetsMake(1, 1, 1, 1)];
+        self.tabBar.selectionIndicatorImage = aImg;
+    } else {
+        self.tabBar.selectionIndicatorImage = nil;
+    }
+#else
+#if (defined(kTabActiveColor) && defined(MODULE_UTILS))
+    [self.tabBar setTintColor:kTabActiveColor];
+#endif
+#endif
+}
+
 
 @end
 
@@ -166,6 +198,15 @@
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
 {
     return [[self selectedViewController] preferredInterfaceOrientationForPresentation];
+}
+
+#pragma mark -
+
+- (void)dealloc
+{
+#ifdef MODULE_THEME_MANAGER
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNoticThemeChanged object:nil];
+#endif
 }
 
 @end

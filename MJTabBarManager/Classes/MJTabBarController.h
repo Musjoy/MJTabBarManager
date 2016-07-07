@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "MJTabBarManager.h"
+#ifdef MODULE_THEME_MANAGER
+#import "MJThemeManager.h"
+#endif
 
 @interface MJTabBarController : UITabBarController
 
@@ -17,6 +20,7 @@
 
 @property (nonatomic, nonatomic) BOOL isViewHadShow;        // 是否已经现实过
 
+- (void)reloadTheme;
 
 @end
 

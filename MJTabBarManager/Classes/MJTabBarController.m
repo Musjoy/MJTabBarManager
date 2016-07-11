@@ -49,7 +49,7 @@
 #ifdef MODULE_THEME_MANAGER
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTheme) name:kNoticThemeChanged object:nil];
 #endif
-    
+
 }
 
 - (void)didReceiveMemoryWarning

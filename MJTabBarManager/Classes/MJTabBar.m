@@ -161,31 +161,26 @@
 - (void)loadAd
 {
 #ifdef MODULE_AD_MANAGER
-    if ([AdManager canShowAd]) {
+//    if ([AdManager canShowAd]) {
         _adWidth = kScreenWidth;
-        CGFloat x = 0;
         UIInterfaceOrientation or = [[UIApplication sharedApplication] statusBarOrientation];
         if (or == UIInterfaceOrientationLandscapeLeft ||
             or == UIInterfaceOrientationLandscapeRight) {
-            CGFloat theHeight = _adWidth;
             _adWidth = kScreenHeight;
-            x = (theHeight - _adWidth) / 2;
         }
         CGFloat adHeight =  _adWidth * 50.0 / 320;
-        CGRect rect = CGRectMake(x, 0, _adWidth, adHeight);
-        _bannerView = [[AdManager shareInstance] createBannerAd:KEY_AD_FOR_HOME withSize:GADAdSizeFromCGSize(rect.size) receiveBlock:^{
+        CGSize size = CGSizeMake(_adWidth, adHeight);
+        [[AdManager shareInstance] loadBannerAd:KEY_AD_FOR_HOME withSize:GADAdSizeFromCGSize(size) receiveBlock:^(DFPBannerView *aBannerView) {
             if (_isAdLoaded) {
                 return;
             }
             _isAdLoaded = YES;
-            
+            _bannerView = aBannerView;
             [self checkAdShowState];
         } removeBlock:^{
             [self checkAdShowState];
         }];
-        [_bannerView setFrame:rect];
-        [_bannerView setBackgroundColor:[UIColor whiteColor]];
-    }
+//    }
 #endif
 }
 

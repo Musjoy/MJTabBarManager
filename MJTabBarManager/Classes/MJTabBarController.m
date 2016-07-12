@@ -124,8 +124,7 @@
     UIColor *tintColor = [MJThemeManager colorFor:kThemeTabTintColor];
     self.tabBar.tintColor = tintColor;
     // 背景色
-    UIColor *bgColor = [MJThemeManager colorFor:kThemeTabBgColor];
-    self.tabBar.backgroundColor = bgColor;
+    self.tabBar.barTintColor = [MJThemeManager colorFor:kThemeTabBgColor];
     // 点击背景
     UIColor *selectBgColor = [MJThemeManager colorFor:kThemeTabSelectBgColor];
     if (selectBgColor) {

@@ -34,6 +34,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if (![self.tabBar isKindOfClass:[MJTabBar class]]) {
+        MJTabBar *tabBar = [[MJTabBar alloc] init];
+        [self setValue:tabBar forKey:@"tabBar"];
+    }
 	// Do any additional setup after loading the view.
     [self.navigationController setNavigationBarHidden:YES];
     

@@ -12,7 +12,18 @@
 #import "MJThemeManager.h"
 #endif
 
+/// tab bar上的banner广告 key设置
+#ifndef KEY_AD_FOR_TAB
+#define KEY_AD_FOR_TAB @"KEY_AD_FOR_TAB"
+#endif
+
 @interface MJTabBarController : UITabBarController
+
+#ifdef MODULE_AD_MANAGER
+
+@property (nonatomic, strong, readonly) IBInspectable NSString *adKey;
+
+#endif
 
 @property (nonatomic, strong) MJTabBarManager *tabBarManager;
 

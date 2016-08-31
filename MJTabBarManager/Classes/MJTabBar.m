@@ -12,14 +12,10 @@
 #endif
 #import <QuartzCore/QuartzCore.h>
 
-#ifdef MODULE_AD_MANAGER
-@interface MJTabBar ()<GADBannerViewDelegate>
-#else
 @interface MJTabBar ()
-#endif
 
 #ifdef MODULE_AD_MANAGER
-@property (nonatomic, strong) DFPBannerView *bannerView;
+@property (nonatomic, strong) UIView *bannerView;
 #endif
 
 @property (nonatomic, assign) BOOL isAdLoaded;                  /**< 广告是否加载完成 */
@@ -28,6 +24,7 @@
 @property (nonatomic, assign) BOOL needHideAd;                  /**< 是否需要隐藏广告，横屏时需要旋转 */
 
 @property (nonatomic, assign) float adWidth;                    /**< 广告长度 */
+@property (nonatomic, assign) float adHeight;                   /**< 广告高度 */
 
 @property (nonatomic, assign) BOOL openBounds;                  /**< 用于临时开启正确bounds取值 */
 
@@ -90,8 +87,7 @@
         aSize.height = 0;
     } else {
         if (_isAdShow && !_needHideAd) {
-            CGFloat adHeight =  _adWidth * 50.0 / 320;
-            aSize.height += adHeight;
+            aSize.height += _adHeight;
         }
     }
     return aSize;
@@ -158,16 +154,17 @@
 
 #pragma mark - Public
 
-- (void)loadAd
+- (void)loadAd:(NSString *)adKey
 {
 #ifdef MODULE_AD_MANAGER
-    [[AdManager shareInstance] loadBannerAd:KEY_AD_FOR_HOME receiveBlock:^(DFPBannerView *aBannerView) {
+    [[AdManager shareInstance] loadBannerAd:adKey receiveBlock:^(UIView *aBannerView) {
         if (_isAdLoaded) {
             return;
         }
         _isAdLoaded = YES;
         _bannerView = aBannerView;
         _adWidth = _bannerView.frame.size.width;
+        _adHeight = _bannerView.frame.size.height;
         [self checkAdShowState];
     } removeBlock:^{
         [self checkAdShowState];
@@ -307,9 +304,8 @@
     [self autosizingBgView];
     
     CGRect rect = self.frame;
-    CGFloat adHeight =  _adWidth * 50.0 / 320;
-    rect.size.height += _isAdShow?adHeight:(-adHeight);
-    rect.origin.y -= _tabBarHidden?0:(_isAdShow?adHeight:(-adHeight));
+    rect.size.height += _isAdShow?_adHeight:(-_adHeight);
+    rect.origin.y -= _tabBarHidden?0:(_isAdShow?_adHeight:(-_adHeight));
     [self setFrame:rect];
 }
 

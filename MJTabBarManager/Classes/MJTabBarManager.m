@@ -56,11 +56,11 @@ static MJTabBarManager *s_tabBarManager = nil;
 }
 
 
-- (void)loadAd
+- (void)loadAd:(NSString *)adKey
 {
     MJTabBar *theTabBar = (MJTabBar *)_tabBarController.tabBar;
     if ([theTabBar isKindOfClass:[MJTabBar class]]) {
-        [theTabBar loadAd];
+        [theTabBar loadAd:adKey];
     }
 }
 

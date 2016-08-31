@@ -8,17 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-/// 首页banner广告 key设置
-#ifndef KEY_AD_FOR_HOME
-#define KEY_AD_FOR_HOME @"KEY_AD_FOR_HOME"
-#endif
 
 @interface MJTabBar : UITabBar
 
 @property (nonatomic, getter=isTabBarHidden) BOOL tabBarHidden;
 
 /** 加载广告 */
-- (void)loadAd;
+- (void)loadAd:(NSString *)adKey;
 
 - (void)refreshSelectionIndicator;
 

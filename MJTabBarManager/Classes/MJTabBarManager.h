@@ -13,7 +13,7 @@
 
 - (id)initWithTabBarController:(UITabBarController *)tabBarController;
 
-- (void)loadAd;
+- (void)loadAd:(NSString *)adKey;
 
 @end
 

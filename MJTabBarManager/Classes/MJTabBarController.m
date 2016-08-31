@@ -45,7 +45,14 @@
     _tabBarManager = [[MJTabBarManager alloc] initWithTabBarController:self];
     [self setDelegate:_tabBarManager];
     
-    [_tabBarManager loadAd];
+#ifdef MODULE_AD_MANAGER
+    if (_adKey == nil) {
+        _adKey = KEY_AD_FOR_TAB;
+    }
+    if (_adKey.length > 0) {
+        [_tabBarManager loadAd:_adKey];
+    }
+#endif
 
     self.tabBar.itemPositioning = UITabBarItemPositioningFill;
     

@@ -206,10 +206,11 @@
     return [[self selectedViewController] supportedInterfaceOrientations];
 }
 
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
-{
-    return [[self selectedViewController] preferredInterfaceOrientationForPresentation];
-}
+// 这个只在present和dismiss时回调用，最好不重写。容易引起奔溃
+//- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+//{
+//    return [[self selectedViewController] preferredInterfaceOrientationForPresentation];
+//}
 
 #pragma mark -
 

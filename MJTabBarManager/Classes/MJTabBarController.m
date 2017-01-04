@@ -140,7 +140,7 @@
     // 点击背景
     UIColor *selectBgColor = [MJThemeManager colorFor:kThemeTabSelectBgColor];
     if (selectBgColor) {
-        UIImage *aImg = [MJThemeManager createImageWithColor:selectBgColor withSize:CGSizeMake(3, 3)];
+        UIImage *aImg = [MJThemeManager createImageWithColor:selectBgColor andSize:CGSizeMake(3, 3)];
         aImg = [aImg resizableImageWithCapInsets:UIEdgeInsetsMake(1, 1, 1, 1)];
         self.tabBar.selectionIndicatorImage = aImg;
     } else {

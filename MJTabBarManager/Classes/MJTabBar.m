@@ -157,7 +157,7 @@
 - (void)loadAd:(NSString *)adKey
 {
 #ifdef MODULE_AD_MANAGER
-    [[AdManager shareInstance] loadBannerAd:adKey receiveBlock:^(UIView *aBannerView) {
+    [[AdManager sharedInstance] loadBannerAd:adKey receiveBlock:^(UIView *aBannerView) {
         if (_isAdLoaded) {
             return;
         }

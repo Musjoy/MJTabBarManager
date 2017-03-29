@@ -44,6 +44,7 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     [self configView];
 }
 
@@ -99,8 +100,6 @@
     _openBounds = YES;
     [super layoutSubviews];
     _openBounds = NO;
-
-    static NSInteger oldSelectIndex = -1;
     
     if (_isAdShow && !_needHideAd) {
         CGSize aSize = [self sizeWithThatFits:[super sizeThatFits:CGSizeZero] ignoreHideState:YES];

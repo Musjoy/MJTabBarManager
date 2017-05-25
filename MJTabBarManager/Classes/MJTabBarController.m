@@ -147,8 +147,8 @@
         self.tabBar.selectionIndicatorImage = nil;
     }
 #else
-#if (defined(kTabActiveColor) && defined(MODULE_UTILS))
-    [self.tabBar setTintColor:kTabActiveColor];
+#if (defined(kTabTintColor) && defined(MODULE_UTILS))
+    [self.tabBar setTintColor:kTabTintColor];
 #endif
 #endif
 }

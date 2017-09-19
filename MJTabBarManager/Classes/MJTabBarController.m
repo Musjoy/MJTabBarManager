@@ -36,7 +36,18 @@
     [super viewDidLoad];
     
     if (![self.tabBar isKindOfClass:[MJTabBar class]]) {
+        // 这里需要把原tabBar的信息拷贝过来
+        UITabBar *oldTabBar = self.tabBar;
         MJTabBar *tabBar = [[MJTabBar alloc] init];
+        if (oldTabBar.delegate) {
+            tabBar.delegate = oldTabBar.delegate;
+        }
+        tabBar.selectedItem = oldTabBar.selectedItem;
+        [tabBar setItems:oldTabBar.items];
+        tabBar.tintColor = oldTabBar.tintColor;
+        tabBar.backgroundColor = oldTabBar.backgroundColor;
+        tabBar.barTintColor = oldTabBar.barTintColor;
+        tabBar.barStyle = oldTabBar.barStyle;
         [self setValue:tabBar forKey:@"tabBar"];
     }
 	// Do any additional setup after loading the view.

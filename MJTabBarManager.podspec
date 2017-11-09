@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "MJTabBarManager"
-  s.version          = "0.1.3"
+  s.version          = "0.1.4"
   s.summary          = "This is a custom TabbarController with the function of ads."
 
   s.homepage         = "https://github.com/Musjoy/MJTabBarManager"

@@ -102,7 +102,7 @@
     _openBounds = NO;
     
     if (_isAdShow && !_needHideAd) {
-        CGSize aSize = [self sizeWithThatFits:[super sizeThatFits:CGSizeZero] ignoreHideState:YES];
+//        CGSize aSize = [self sizeWithThatFits:[super sizeThatFits:CGSizeZero] ignoreHideState:YES];
         CGFloat offsetY = _adHeight + 1;
         for (UIView *aView in self.subviews) {
             if ([aView isKindOfClass:NSClassFromString(@"UITabBarButton")]) {

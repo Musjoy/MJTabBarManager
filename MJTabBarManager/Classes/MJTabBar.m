@@ -282,9 +282,8 @@
         [aMJTabBarVC.navigationController setNavigationBarHidden:!isHide animated:NO];
         [aMJTabBarVC.navigationController setNavigationBarHidden:isHide animated:NO];
     }
-    
-    [aMJTabBarVC.navigationController.view.layer layoutSublayers];
-//    [aMJTabBarVC.view.layer layoutSublayers];
+        
+    [aMJTabBarVC.selectedViewController.view layoutSubviews];
 }
 
 

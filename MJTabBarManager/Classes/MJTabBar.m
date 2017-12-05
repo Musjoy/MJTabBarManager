@@ -166,6 +166,7 @@
         _adHeight = _bannerView.frame.size.height;
         [self checkAdShowState];
     } removeBlock:^{
+        _isAdLoaded = NO;
         [self checkAdShowState];
     }];
 #endif

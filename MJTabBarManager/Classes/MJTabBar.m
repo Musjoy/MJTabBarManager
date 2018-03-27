@@ -64,6 +64,14 @@
 - (CGSize)sizeThatFits:(CGSize)size
 {
     CGSize aSize = [super sizeThatFits:size];
+    
+    if (@available(iOS 11.0, *)) {
+        float bottomInset = self.safeAreaInsets.bottom;
+        if (bottomInset > 0 && aSize.height < 50 && (aSize.height + bottomInset < 90)) {
+            aSize.height += bottomInset;
+        }
+    }
+    
     return [self sizeWithThatFits:aSize ignoreHideState:NO];;
 }
 

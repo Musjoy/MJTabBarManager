@@ -7,8 +7,8 @@
 //
 
 #import "MJTabBar.h"
-#ifdef MODULE_AD_MANAGER
-#import "AdManager.h"
+#ifdef  MODULE_AD_MANAGER
+#import <MJAdManager/AdManager.h>
 #endif
 #import <QuartzCore/QuartzCore.h>
 

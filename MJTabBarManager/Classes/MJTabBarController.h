@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "MJTabBarManager.h"
-#ifdef MODULE_THEME_MANAGER
-#import "MJThemeManager.h"
+#ifdef  MODULE_THEME_MANAGER
+#import <MJThemeManager/MJThemeManager.h>
 #endif
 
 /// tab bar上的banner广告 key设置

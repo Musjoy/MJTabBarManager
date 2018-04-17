@@ -8,8 +8,8 @@
 
 #import "MJTabBarController.h"
 #import "MJTabBar.h"
-#ifdef MODULE_UTILS
-#import "UIColor+Utils.h"
+#ifdef  MODULE_UTILS
+#import <MJUtils/UIColor+Utils.h>
 #endif
 
 #ifndef DEFAULT_ANIMATE_DURATION
